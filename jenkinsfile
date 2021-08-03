@@ -1,0 +1,17 @@
+node('GOL')
+{
+  stage('SCM')
+  {
+      git credentialsId: '50dedec2-f9de-44a4-9d1d-0adc9c80eca2', url: 'https://github.com/gurana537/game-of-life.git'
+  }
+  stage('Build')
+  {
+      sh 'mvn clean package'
+  }
+  stage('Post build')
+  {
+      junit '**/TEST-*.xml'
+      archiveArtifacts artifacts: '**/*.war', followSymlinks: false
+  }
+
+}
