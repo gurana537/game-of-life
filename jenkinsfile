@@ -1,17 +1,28 @@
-node('GOL')
-{
-  stage('SCM')
-  {
-      git credentialsId: '50dedec2-f9de-44a4-9d1d-0adc9c80eca2', url: 'https://github.com/gurana537/game-of-life.git'
-  }
-  stage('Build')
-  {
-      sh 'mvn clean package'
-  }
-  stage('Post build')
-  {
-      junit '**/TEST-*.xml'
-      archiveArtifacts artifacts: '**/*.war', followSymlinks: false
-  }
+pipeline{
+    agent { label 'GOL'}
+    triggers{
+        pollSCM('* * * * *')
+    }
+    stages{
+        stage('SCM')
+        {
+            steps{
+                git branch: 'master', url: 'https://github.com/gurana537/game-of-life.git'
+            }
+        }
+        stage('Build'){
+            steps{
+                sh 'mvn package'
+            }
+            
+        }
+    }
+    post {
+        success {
+            artifacts '**/*.war'
+            junit '**/TEST-*.xml'
+        }
+    }
+
 
 }
