@@ -1,8 +1,8 @@
 pipeline{
     agent { label 'GOL'}
-    triggers{
+    /*triggers{
         pollSCM('* * * * *')
-    }
+    }*/
     stages{
         stage('SCM')
         {
